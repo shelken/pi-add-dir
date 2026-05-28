@@ -628,6 +628,11 @@ export default function addDirExtension(pi: ExtensionAPI) {
       if (result.extensionHints.length > 0) {
         ctx.ui.notify(result.extensionHints.join("\n"), "warning");
       }
+
+      // Auto-reload if skills were found so they register as /skill:name
+      if (result.ok && result.hasNewSkills) {
+        await ctx.reload();
+      }
     },
   });
 
@@ -664,6 +669,10 @@ export default function addDirExtension(pi: ExtensionAPI) {
 
       if (result.extensionHints.length > 0) {
         ctx.ui.notify(result.extensionHints.join("\n"), "warning");
+      }
+
+      if (result.ok && result.hasNewSkills) {
+        await ctx.reload();
       }
     },
   });
@@ -704,6 +713,11 @@ export default function addDirExtension(pi: ExtensionAPI) {
 
       const result = removeDir(absolutePath, ctx);
       ctx.ui.notify(result.message, result.ok ? "info" : "error");
+
+      // Auto-reload if skills were present so they get unregistered
+      if (result.ok && result.hadSkills) {
+        await ctx.reload();
+      }
     },
   });
 

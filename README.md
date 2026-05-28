@@ -172,11 +172,9 @@ Extensions cannot be loaded dynamically at runtime (pi platform limitation), but
 
 Context injection is cached — the filesystem is only re-scanned when directories are added or removed, not on every turn. This keeps the `before_agent_start` hook fast.
 
-### ~~Auto-reload behavior~~
+### Auto-reload behavior
 
-~~When you add or remove a directory that contains skills, pi automatically reloads to register/unregister those skills as `/skill:name` commands. This is a brief operation — your session state is preserved.~~
-
-> ⚠️ 自动 reload 已移除。添加/移除包含 skills 的目录后，需要手动 `/reload` 才能生效。
+When you add or remove a directory that contains skills, pi automatically reloads (via internal API) to register/unregister those skills as `/skill:name` commands. This is a brief, non-interactive operation — your session state is preserved.
 
 ## Limitations
 
