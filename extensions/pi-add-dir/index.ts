@@ -628,11 +628,6 @@ export default function addDirExtension(pi: ExtensionAPI) {
       if (result.extensionHints.length > 0) {
         ctx.ui.notify(result.extensionHints.join("\n"), "warning");
       }
-
-      // Auto-reload if skills were found so they register as /skill:name
-      if (result.ok && result.hasNewSkills) {
-        await ctx.reload();
-      }
     },
   });
 
@@ -669,10 +664,6 @@ export default function addDirExtension(pi: ExtensionAPI) {
 
       if (result.extensionHints.length > 0) {
         ctx.ui.notify(result.extensionHints.join("\n"), "warning");
-      }
-
-      if (result.ok && result.hasNewSkills) {
-        await ctx.reload();
       }
     },
   });
@@ -713,11 +704,6 @@ export default function addDirExtension(pi: ExtensionAPI) {
 
       const result = removeDir(absolutePath, ctx);
       ctx.ui.notify(result.message, result.ok ? "info" : "error");
-
-      // Auto-reload if skills were present so they get unregistered
-      if (result.ok && result.hadSkills) {
-        await ctx.reload();
-      }
     },
   });
 
@@ -811,20 +797,6 @@ export default function addDirExtension(pi: ExtensionAPI) {
         response.push(`To enable: add "${resolveDir(dirPath, ctx.cwd)}/.pi/extensions" to settings.json extensions array, then /reload.`);
       }
       response.push(`\nYou can now access files at: ${resolveDir(dirPath, ctx.cwd)}`);
-
-      // Trigger reload if skills found so they register as /skill:name
-      if (dirCtx.skills.size > 0) {
-        // Use sendMessage to trigger reload without polluting command autocomplete
-        pi.sendMessage(
-          { customType: "add-dir:reload", content: [], display: false },
-          { triggerTurn: false },
-        );
-        // Schedule the actual reload via a brief delay to let the tool result render first
-        setTimeout(() => {
-          pi.sendUserMessage("/reload", { deliverAs: "followUp" });
-        }, 100);
-        response.push("\nTriggering reload to register skills as /skill:name commands...");
-      }
 
       return {
         content: [{ type: "text", text: response.join("\n") }],
