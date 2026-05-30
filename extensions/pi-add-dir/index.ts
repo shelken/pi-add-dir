@@ -308,19 +308,7 @@ function buildContextInjection(dirs: AddedDir[]): string {
       }
     }
 
-    // Summary of directory contents
-    try {
-      const entries = fs.readdirSync(dir.absolutePath, { withFileTypes: true });
-      const topLevel = entries
-        .filter(e => !e.name.startsWith(".") || e.name === ".pi" || e.name === ".agents")
-        .slice(0, 20)
-        .map(e => `${e.isDirectory() ? "📂" : "📄"} ${e.name}`);
-      if (topLevel.length > 0) {
-        sections.push(`\n<details><summary>Top-level contents</summary>\n\n${topLevel.join("\n")}\n</details>`);
-      }
-    } catch {
-      // Skip if unreadable
-    }
+    // 变更原因：顶层目录列表会随文件创建/删除变化，放入系统 prompt 会破坏 prompt cache。
   }
 
   const injection = sections.join("\n");

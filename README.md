@@ -145,7 +145,7 @@ For each added directory, the extension reads:
 | `CLAUDE.md` | `<dir>/CLAUDE.md`, `<dir>/.pi/CLAUDE.md` |
 | Skills | `<dir>/.pi/skills/*/SKILL.md`, `<dir>/.agents/skills/*/SKILL.md`, `<dir>/.claude/skills/*/SKILL.md` |
 
-Context files are appended to the system prompt on every turn (cached — filesystem is only re-scanned when directories change).
+Context files are appended to the system prompt on every turn (cached — filesystem is only re-scanned when directories change). Directory listings are intentionally not injected, because ordinary file creation/deletion would otherwise change the system prompt and reduce prompt-cache hits.
 
 Skills are registered natively with pi via the `resources_discover` event, so they appear as `/skill:name` commands with full autocomplete support.
 
